@@ -1,0 +1,1 @@
+fortio load -c 32 -qps 0 -t 30s http://fintech.demo.local/customer/v1/login

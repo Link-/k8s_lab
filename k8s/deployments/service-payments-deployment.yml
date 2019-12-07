@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-payments-deployment
+  labels:
+    app: fintech-app
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    name: service-payments-deployment
+    app: fintech-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-payments-deployment
+  labels:
+    name: service-payments-deployment
+    app: fintech-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: service-payments-deployment
+      app: fintech-app
+      version: v1
+  template:
+    metadata:
+      labels:
+        name: service-payments-deployment
+        app: fintech-app
+        version: v1
+    spec:
+      containers:
+        - name: interop
+          image: cloud.canister.io:5000/interop/service-payments:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: "PORT"
+              value: "80"
+            - name: "CUSTOMER_SERVICE_LOGIN_URL"
+              value: "http://http.TCP.service-customer-deployment.default.svc.cluster.local/login"
+            - name: "MOCKY_EXTERNAL_URL"
+              value: "http://www.mocky.io/v2/5db852283b0000eda535f04e"
+      imagePullSecrets:
+        - name: canister.io
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: service-payments-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - host: fintech.demo.local
+    http:
+      paths:
+      - path: /payments/v1(/|$)(.*)
+        backend:
+          serviceName: service-payments-deployment
+          servicePort: 80

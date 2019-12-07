@@ -1,0 +1,13 @@
+windows:
+  - name: kubernetes-local
+    root: /Users/bdghaidi/Projects/pocs/cluster
+    layout: double-main-horizontal
+    panes:
+      - minikube status
+      - c
+      - c
+      - c
+      - c
+      - c
+      - c
+      

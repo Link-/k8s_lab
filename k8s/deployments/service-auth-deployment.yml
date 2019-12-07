@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-auth-deployment
+  labels:
+    app: fintech-app
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    name: service-auth-deployment
+    app: fintech-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-auth-deployment
+  labels:
+    name: service-auth-deployment
+    app: fintech-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: service-auth-deployment
+      app: fintech-app
+      version: v1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        name: service-auth-deployment
+        app: fintech-app
+        version: v1
+    spec:
+      containers:
+        - name: interop
+          image: cloud.canister.io:5000/interop/service-auth:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          env:
+            - name: "PORT"
+              value: "80"
+      imagePullSecrets:
+        - name: canister.io
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: service-auth-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - host: fintech.demo.local
+    http:
+      paths:
+      - path: /auth/v1(/|$)(.*)
+        backend:
+          serviceName: service-auth-deployment
+          servicePort: 80

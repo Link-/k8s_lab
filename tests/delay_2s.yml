@@ -1,9 +1,11 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: service-auth-deployment
+  name: service-auth
+  app: fintech-app
+  version: v1
 spec:
-  host: service-auth-deployment
+  host: service-auth
   subsets:
   - name: v1
     labels:
@@ -12,10 +14,12 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: service-auth-deployment
+  name: service-auth
+  app: fintech-app
+  version: v1
 spec:
   hosts:
-  - service-auth-deployment
+  - service-auth
   http:
   - fault:
       delay:
@@ -24,10 +28,10 @@ spec:
           value: 100
     route:
     - destination:
-        host: service-auth-deployment
+        host: service-auth
         subset: v1
       weight: 100
   - route:
     - destination:
-        host: service-auth-deployment
+        host: service-auth
         subset: v1

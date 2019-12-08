@@ -1,9 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-payments-deployment
+  name: service-payments
   labels:
+    name: service-payments
     app: fintech-app
+    version: v1
 spec:
   type: NodePort
   ports:
@@ -12,27 +14,29 @@ spec:
     protocol: TCP
     name: http
   selector:
-    name: service-payments-deployment
+    name: service-payments
     app: fintech-app
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-payments-deployment
+  name: service-payments
   labels:
-    name: service-payments-deployment
+    name: service-payments
     app: fintech-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      name: service-payments-deployment
+      name: service-payments
       app: fintech-app
       version: v1
   template:
     metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
       labels:
-        name: service-payments-deployment
+        name: service-payments
         app: fintech-app
         version: v1
     spec:
@@ -46,7 +50,7 @@ spec:
             - name: "PORT"
               value: "80"
             - name: "CUSTOMER_SERVICE_LOGIN_URL"
-              value: "http://http.TCP.service-customer-deployment.default.svc.cluster.local/login"
+              value: "http://service-customer.default.svc.cluster.local/login"
             - name: "MOCKY_EXTERNAL_URL"
               value: "http://www.mocky.io/v2/5db852283b0000eda535f04e"
       imagePullSecrets:
@@ -65,5 +69,5 @@ spec:
       paths:
       - path: /payments/v1(/|$)(.*)
         backend:
-          serviceName: service-payments-deployment
+          serviceName: service-payments
           servicePort: 80

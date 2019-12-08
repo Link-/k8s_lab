@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-customer-deployment
+  name: service-customer
   labels:
-    name: service-customer-deployment
-    app: service-customer-deployment
+    name: service-customer
+    app: fintech-app
     version: v1
 spec:
   type: NodePort
@@ -14,28 +14,28 @@ spec:
     protocol: TCP
     name: http
   selector:
-    name: service-customer-deployment
-    app: service-customer-deployment
+    name: service-customer
+    app: fintech-app
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-customer-deployment
+  name: service-customer
   labels:
-    name: service-customer-deployment
-    app: service-customer-deployment
+    name: service-customer
+    app: fintech-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      name: service-customer-deployment
-      app: service-customer-deployment
+      name: service-customer
+      app: fintech-app
       version: v1
   template:
     metadata:
       labels:
-        name: service-customer-deployment
-        app: service-customer-deployment
+        name: service-customer
+        app: fintech-app
         version: v1
     spec:
       containers:
@@ -48,7 +48,7 @@ spec:
             - name: "PORT"
               value: "80"
             - name: "AUTHENTICATION_SERVICE_URL"
-              value: "http://http.TCP.service-auth-deployment.default.svc.cluster.local/authenticate"
+              value: "http://service-auth.default.svc.cluster.local/authenticate"
       imagePullSecrets:
         - name: canister.io
 ---
@@ -65,5 +65,5 @@ spec:
       paths:
       - path: /customer/v1(/|$)(.*)
         backend:
-          serviceName: service-customer-deployment
+          serviceName: service-customer
           servicePort: 80

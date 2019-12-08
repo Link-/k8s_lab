@@ -1,9 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-auth-deployment
+  name: service-auth
   labels:
+    name: service-auth
     app: fintech-app
+    version: v1
 spec:
   type: NodePort
   ports:
@@ -12,21 +14,21 @@ spec:
     protocol: TCP
     name: http
   selector:
-    name: service-auth-deployment
+    name: service-auth
     app: fintech-app
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-auth-deployment
+  name: service-auth
   labels:
-    name: service-auth-deployment
+    name: service-auth
     app: fintech-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      name: service-auth-deployment
+      name: service-auth
       app: fintech-app
       version: v1
   template:
@@ -34,7 +36,7 @@ spec:
       annotations:
         sidecar.istio.io/inject: "true"
       labels:
-        name: service-auth-deployment
+        name: service-auth
         app: fintech-app
         version: v1
     spec:
@@ -63,5 +65,5 @@ spec:
       paths:
       - path: /auth/v1(/|$)(.*)
         backend:
-          serviceName: service-auth-deployment
+          serviceName: service-auth
           servicePort: 80

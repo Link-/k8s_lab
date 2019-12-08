@@ -49,6 +49,10 @@ spec:
           env:
             - name: "PORT"
               value: "80"
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
       imagePullSecrets:
         - name: canister.io
 ---

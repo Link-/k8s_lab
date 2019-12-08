@@ -6,6 +6,7 @@ router.get('/app', function(req, res, next) {
   response = {
     'method': 'GET',
     'path': '/app',
+    'POD': process.env.MY_POD_NAME,
     'body': {
       'code': 100,
       'key': 'authentication',
@@ -20,6 +21,7 @@ router.get('/authenticate', function(req, res, next) {
   response = {
     'method': 'GET',
     'path': '/authenticate',
+    'POD': process.env.MY_POD_NAME,
     'body': {
       'code': 200,
       'key': 'authentication',

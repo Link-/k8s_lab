@@ -7,6 +7,7 @@ router.get('/app', function(req, res, next) {
   response = {
     'method': 'GET',
     'path': '/app',
+    'POD': process.env.MY_POD_NAME,
     'body': {
       'key': 'customer',
       'value': '1.0.5'
@@ -25,6 +26,7 @@ router.get('/login', function(req, res, next) {
     response = {
       'method': 'GET',
       'path': '/login',
+      'POD': process.env.MY_POD_NAME,
       'body': {
         'key': 'authentication',
         'value': 'User logged in successfully',
@@ -36,6 +38,7 @@ router.get('/login', function(req, res, next) {
     response = {
       'method': 'GET',
       'path': '/login',
+      'POD': process.env.MY_POD_NAME,
       'body': {
         'key': 'authentication',
         'value': 'User login failed',

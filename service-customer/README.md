@@ -11,8 +11,8 @@ http://localhost:9005/health
 ```
 
 ```
-$: docker build -t mockapi/service-customer:v1 .
-$: docker run -p 3005:3005 -p 9005:9005 mockapi/service-customer
+docker build -t cloud.canister.io:5000/interop/service-customer:v1 .
+docker run -p 3005:3005 -p 9005:9005 cloud.canister.io:5000/interop/service-customer
 
 # Tag image
 docker tag mockapi/service-customer:v1 cloud.canister.io:5000/interop/service-customer:v1

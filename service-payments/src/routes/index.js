@@ -7,6 +7,7 @@ router.get('/app', function(req, res, next) {
   response = {
     'method': 'GET',
     'path': '/app',
+    'POD': process.env.MY_POD_NAME,
     'body': {
       'key': 'payments',
       'value': '1.0.2'
@@ -27,6 +28,7 @@ router.get('/pay', function(req, res, next) {
     transactionResponse = {
       'method': 'GET',
       'path': '/pay',
+      'POD': process.env.MY_POD_NAME,
       'body': {
         'key': 'authentication',
         'value': 'User logged in successfully',
@@ -54,6 +56,7 @@ router.get('/pay', function(req, res, next) {
     transactionResponse = {
       'method': 'GET',
       'path': '/pay',
+      'POD': process.env.MY_POD_NAME,
       'body': {
         'key': 'payment',
         'value': 'User payment failed',

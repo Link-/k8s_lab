@@ -53,6 +53,10 @@ spec:
               value: "http://service-customer.default.svc.cluster.local/login"
             - name: "MOCKY_EXTERNAL_URL"
               value: "http://www.mocky.io/v2/5db852283b0000eda535f04e"
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
       imagePullSecrets:
         - name: canister.io
 ---

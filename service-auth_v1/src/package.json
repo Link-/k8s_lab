@@ -19,6 +19,8 @@
     "morgan": "~1.9.0"
   },
   "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-exec": "^4.0.0",
     "npm-watch": "^0.6.0"
   }
 }

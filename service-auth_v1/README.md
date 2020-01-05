@@ -10,6 +10,7 @@ http://localhost:9005/live
 http://localhost:9005/health
 ```
 
+#### References
 ```
 docker build -t cloud.canister.io:5000/interop/service-auth:v1 .
 docker run -p 3005:3005 -p 9005:9005 cloud.canister.io:5000/interop/service-auth:v1
@@ -21,6 +22,13 @@ docker tag mockapi/service-auth:v1 cloud.canister.io:5000/interop/service-auth:v
 docker push cloud.canister.io:5000/interop/service-auth:v1
 ```
 
+#### Build
+```
+cd src/
+gulp
+```
+
+#### Info
 ```
 PORT=80
 ```

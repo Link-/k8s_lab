@@ -54,7 +54,14 @@ kubectl -n istio-system port-forward (kubectl -n istio-system get pod -l app=pro
 istioctl dashboard prometheus
 ```
 
+```
+# Kibana
+kubectl -n logging port-forward (kubectl -n logging get pod -l app=kibana -o jsonpath='{.items[0].metadata.name}') 5601:5601 &
+http://localhost:5601
+```
+
 ### References
 - https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 - https://blog.hasura.io/sharing-a-local-registry-for-minikube-37c7240d0615/
 - https://caylent.com/50-useful-kubernetes-tools#Mon
+- https://istio.io/docs/tasks/observability/logs/fluentd/

@@ -1,0 +1,48 @@
+# Configuration for logentry instances
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: accesslog
+  namespace: istio-system
+spec:
+  compiledTemplate: logentry
+  params:
+    severity: '"Default"'
+    timestamp: request.time
+    variables:
+      sourceIp: source.ip | ip("0.0.0.0")
+      destinationIp: destination.ip | ip("0.0.0.0")
+      sourceUser: source.principal | ""
+      method: request.method | ""
+      url: request.path | ""
+      protocol: request.scheme | "http"
+      responseCode: response.code | 0
+      responseSize: response.size | 0
+      requestSize: request.size | 0
+      latency: response.duration | "0ms"
+    monitored_resource_type: '"UNSPECIFIED"'
+---
+# Configuration for a Fluentd handler
+apiVersion: config.istio.io/v1alpha2
+kind: handler
+metadata:
+  name: handler
+  namespace: istio-system
+spec:
+  compiledAdapter: fluentd
+  params:
+    address: "fluentd-es.logging:24224"
+---
+# Rule to send logentry instances to the Fluentd handler
+apiVersion: config.istio.io/v1alpha2
+kind: rule
+metadata:
+  name: newlogtofluentd
+  namespace: istio-system
+spec:
+  match: "true" # match for all requests
+  actions:
+   - handler: handler
+     instances:
+     - newlog
+---

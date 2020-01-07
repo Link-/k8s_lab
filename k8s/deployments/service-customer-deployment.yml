@@ -48,7 +48,7 @@ spec:
             - name: "PORT"
               value: "80"
             - name: "AUTHENTICATION_SERVICE_URL"
-              value: "http://service-auth.default.svc.cluster.local/authenticate"
+              value: "http://service-auth-v1.default.svc.cluster.local/authenticate"
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:

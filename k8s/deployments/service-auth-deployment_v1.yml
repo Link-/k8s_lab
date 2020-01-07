@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-auth
+  name: service-auth-v1
   labels:
     name: service-auth
     app: fintech-app
@@ -16,14 +16,16 @@ spec:
   selector:
     name: service-auth
     app: fintech-app
+    version: v1
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-auth
+  name: service-auth-v1
   labels:
     name: service-auth
     app: fintech-app
+    version: v1
 spec:
   replicas: 2
   selector:
@@ -69,5 +71,5 @@ spec:
       paths:
       - path: /auth/v1(/|$)(.*)
         backend:
-          serviceName: service-auth
+          serviceName: service-auth-v1
           servicePort: 80

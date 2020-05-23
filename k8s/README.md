@@ -3,10 +3,18 @@
 ```
 # Start minikube
 minikube start
-minikube start --memory='3000mb' --cpus=4
+# Make sure the kubernetes version used is supported!!
+minikube start --memory='8000mb' --cpus=4 --kubernetes-version=v1.16.9
+eval (minikube docker-env)
+
+
+## Make sure there are no conflicting DNS services running
+# Check what's running on port 53
+sudo lsof -i :53
+sudo launchctl unload /Library/LaunchDaemons/com.opendns.osx.RoamingClientConfigUpdater.plist
 ```
 
-Using canister
+### Using canister (CRAP)
 ```
 docker login --username=interop cloud.canister.io:5000
 docker tag <image name> cloud.canister.io:5000/interop/<repo>
@@ -14,34 +22,32 @@ docker push cloud.canister.io:5000/interop/<repo>
 
 # Create Kubernetes secret
 kubectl create secret docker-registry canister.io --docker-server=cloud.canister.io:5000 --docker-username=interop --docker-password=<password> --docker-email=bassem@interop.link
-
 ```
 
-Local registry
+### Using Treescale (CRAP)
 ```
-# Enable port fowarding
-kubectl port-forward --namespace kube-system (kubectl get po -n kube-system | grep kube-registry-v0 | awk '{print $1;}') 5000:5000
-
-# Make sure the following is in the /etc/hosts file
-127.0.0.1	localhost registry.local
+docker login repo.treescale.com
 ```
 
-```
-# Alpine
-kubectl run alpine-util --image=alpine:latest -it /bin/sh
-```
+### Using AWS ECR
+
+Generated password expired every 12 hours.
 
 ```
-# Weave
-kubectl port-forward svc/weave-scope-app -n weave 4040:80
+# Get ECR password to authenticate with the registry
+aws ecr get-login-password --profile personal --region eu-west-1
+docker login -u AWS https://730880032795.dkr.ecr.eu-west-1.amazonaws.com -p 
+
+# Configure registry with minikube
+
+minikube addons enable registry-creds
+minikube addons configure registry-creds
 ```
 
+### Istio
 ```
-# Useful
-kubectl -n default logs -f deployment/service-payments-deployment --all-containers=true --since=10m
-```
-
-```
+# Install
+istioctl manifest apply --set profile=default
 # istio
 # Label namespace for istio
 kubectl label namespace <namespace> istio-injection=enabled
@@ -58,6 +64,32 @@ istioctl dashboard prometheus
 # Kibana
 kubectl -n logging port-forward (kubectl -n logging get pod -l app=kibana -o jsonpath='{.items[0].metadata.name}') 5601:5601 &
 http://localhost:5601
+```
+
+### Local registry
+```
+# Enable port fowarding
+kubectl port-forward --namespace kube-system (kubectl get po -n kube-system | grep kube-registry-v0 | awk '{print $1;}') 5000:5000
+
+# Make sure the following is in the /etc/hosts file
+127.0.0.1	localhost registry.local
+```
+
+### Test
+```
+# Alpine
+kubectl run alpine-util --image=alpine:latest -it /bin/sh
+```
+
+```
+# Weave
+kubectl port-forward svc/weave-scope-app -n weave 4040:80
+```
+
+### Misc
+```
+# Useful
+kubectl -n default logs -f deployment/service-payments-deployment --all-containers=true --since=10m
 ```
 
 ### References

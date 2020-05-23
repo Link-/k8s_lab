@@ -27,7 +27,7 @@ metadata:
     app: fintech-app
     version: v1
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       name: service-auth
@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
         - name: interop
-          image: cloud.canister.io:5000/interop/service-auth:v1
+          image: 730880032795.dkr.ecr.eu-west-1.amazonaws.com/service-auth:v1
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -56,7 +56,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
       imagePullSecrets:
-        - name: canister.io
+        - name: awsecr-cred
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress

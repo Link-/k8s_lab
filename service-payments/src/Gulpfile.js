@@ -5,7 +5,7 @@ const path = require('path');
 /** Configuration Constants */
 const BUILD_VERSION = 'v1';
 const SERVICE_NAME = 'service-payments';
-const CONTAINER_REGISTRY = 'cloud.canister.io:5000/interop';
+const CONTAINER_REGISTRY = '730880032795.dkr.ecr.eu-west-1.amazonaws.com';
 const DOCKER_FILE_PATH = path.join(__dirname, '../Dockerfile');
 
 /**

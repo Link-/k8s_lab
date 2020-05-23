@@ -57,7 +57,11 @@ istioctl manifest apply --set profile=demo
 kubectl label namespace <namespace> istio-injection=enabled
 kubectl get namespace -L istio-injection
 
-istioctl install --set addonComponents.grafana.enabled=true
+# Envoy
+istioctl dashboard envoy <podname>.<namespace>
+
+
+
 ```
 
 <!-- ```

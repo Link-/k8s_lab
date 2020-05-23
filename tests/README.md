@@ -6,6 +6,14 @@ kubectl apply -f ./destination_rules_all.yml
 
 ### Tests
 
+#### Basic traffic
+
+```
+curl -G fintech.demo.local/auth/v1/authenticate
+watch -n 3 curl -G fintech.demo.local/customer/v1/login
+watch -n 3 curl -G fintech.demo.local/payments/v1/pay
+```
+
 ```
 while true
     curl -G http://fintech.demo.local/customer/v1/login

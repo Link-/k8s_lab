@@ -51,6 +51,17 @@ brew install watch
 
 ### Setup AWS ECR
 
+### Create awscli user
+
+- Go to: AWS Console -> Profile -> My Security Credentials
+- In the left menu go to: Users
+- Add user
+- After you create the user, click on it and go to: Security Credentials
+- Create Access Key
+- Keep the modal open you will use it in the next step
+
+Reference: [https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+
 #### Setup AWS Cli
 
 ```
@@ -58,8 +69,11 @@ brew install watch
 brew install awscli
 
 # Configure credentials
+# You will use the Access Key you created in the previous step
 aws configure
 ```
+
+Reference: [https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 
 #### Create Repositories in ECR
 
@@ -68,6 +82,8 @@ aws configure
     - `service-auth`
     - `service-customer`
     - `service-payments`
+
+Reference: [https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-create.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-create.html)
 
 #### Login to AWS ECR with Docker
 
@@ -172,9 +188,16 @@ kubectl apply -f ./chaos_delay_7s.yml
 
 ---
 
+## Caveats
+- In all the examples above I've been using the fish shell which varies slightly from bash
+- The above setup has only been tested on macOS
+- Multiple configurations can be automated and some are hardcoded like the ECR URL in the deployments and gulp files
+
+--- 
+
 ## Release History
 
-* 0.0.1
+* 0.1.0
     * Work in progress
 
 ---

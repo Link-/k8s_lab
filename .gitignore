@@ -153,7 +153,8 @@ dist
 
 # Custom
 weave_scope/
-istio-1.4.0/
+istio*/
+*.tar.gz
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm

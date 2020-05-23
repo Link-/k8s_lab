@@ -7,6 +7,11 @@ minikube start
 minikube start --memory='8000mb' --cpus=4 --kubernetes-version=v1.16.9
 eval (minikube docker-env)
 
+# Enable necessary addons
+minikube addons enable ingress
+minikube addons enable registry
+minikube addons enable registry-creds
+
 
 ## Make sure there are no conflicting DNS services running
 # Check what's running on port 53
@@ -40,21 +45,22 @@ docker login -u AWS https://730880032795.dkr.ecr.eu-west-1.amazonaws.com -p
 
 # Configure registry with minikube
 
-minikube addons enable registry-creds
 minikube addons configure registry-creds
 ```
 
 ### Istio
 ```
-# Install
-istioctl manifest apply --set profile=default
-# istio
-# Label namespace for istio
+# Install demo profile (contains everything)
+istioctl manifest apply --set profile=demo
+
+# Label namespace for istio to inject side-car into pods belonging to this namespace
 kubectl label namespace <namespace> istio-injection=enabled
 kubectl get namespace -L istio-injection
+
+istioctl install --set addonComponents.grafana.enabled=true
 ```
 
-```
+<!-- ```
 # Prometheus
 kubectl -n istio-system port-forward (kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &
 istioctl dashboard prometheus
@@ -64,16 +70,16 @@ istioctl dashboard prometheus
 # Kibana
 kubectl -n logging port-forward (kubectl -n logging get pod -l app=kibana -o jsonpath='{.items[0].metadata.name}') 5601:5601 &
 http://localhost:5601
-```
+``` -->
 
-### Local registry
+<!-- ### Local registry
 ```
 # Enable port fowarding
 kubectl port-forward --namespace kube-system (kubectl get po -n kube-system | grep kube-registry-v0 | awk '{print $1;}') 5000:5000
 
 # Make sure the following is in the /etc/hosts file
 127.0.0.1	localhost registry.local
-```
+``` -->
 
 ### Test
 ```
@@ -88,6 +94,9 @@ kubectl port-forward svc/weave-scope-app -n weave 4040:80
 
 ### Misc
 ```
+# Monitoring
+watch -n 3 kubectl get pods -n default
+
 # Useful
 kubectl -n default logs -f deployment/service-payments-deployment --all-containers=true --since=10m
 ```

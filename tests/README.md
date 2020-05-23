@@ -1,3 +1,9 @@
+## Pre-requisites
+
+```
+kubectl apply -f ./destination_rules_all.yml
+```
+
 ### Tests
 
 ```
